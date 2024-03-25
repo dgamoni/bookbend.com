@@ -343,6 +343,7 @@ if (have_posts()) :
             	
             	//share links on single post
             	echo '<div class="soc_share_bookbend_mobile">';
+                //echo '<div id="fb-like-div">0</div>';
             		avia_social_share_links();
             	echo '</div>';
    
@@ -383,3 +384,30 @@ if (have_posts()) :
 		echo "<div class='{$blog_style}'>".avia_pagination('', 'nav')."</div>";
 	}
 ?>
+
+
+    <script>
+        jQuery(document).ready(function($) {
+
+$(function() {
+      var url = "<?php echo get_permalink(); ?>";
+      var apiUrl = "https://graph.facebook.com/?ids=" + url;
+    
+  $.ajax({
+      url: apiUrl,
+      success: function(result) {
+  $.each(result, function(key, val) {
+        console.log(key + " - " + val["share"]["share_count"]);
+        console.log(key + " - " + val["share"]["comment_count"]);
+
+            var commentCount = val["share"]["comment_count"];
+            var shareCount = val["share"]["share_count"];
+            $("#fb-like-div").html(shareCount);
+            $("#fb-comment-div").html(commentCount);
+          });
+        }
+      });
+    });
+
+        });
+    </script>

@@ -121,6 +121,7 @@ function add_custom_css() { ?>
 	<script>
 		jQuery(document).ready(function($) {
 
+
 		});
 	</script>
 	<style>
@@ -137,15 +138,19 @@ function add_custom_css() { ?>
 		        background-color: white;
 		        margin-left: 90px;
 		            margin-bottom: 30px;
+			border-style: solid;
+			border-width: 1px;
+			border-color: #e1e1e1;
 		}
 		#top.single-post #main .sidebar {
 		    max-width: 300px;
+		    padding-left: 30px;
 		}
 		.single-post .template-single-blog {
 			margin-top: 30px;
 		}
 		.single-post .inner_sidebar {
-		    margin-left: 30px;
+		    margin-left: 0px;
 		}
 		.single-post .sidebar_right .comment_container {
 		        padding-left: 50px;
@@ -165,6 +170,7 @@ function add_custom_css() { ?>
 			display: flex;
 		    flex-direction: column;
 		    flex-wrap: wrap;
+		    border-top: none;
 		}
 		.soc_share_bookbend_wrap .av-share-box {
 		    margin-top: 0;
@@ -182,6 +188,8 @@ function add_custom_css() { ?>
 			border-bottom: 1px solid #e1e1e1;
 			font-size: 16px;
     line-height: 20px;
+        padding-left: 0;
+    padding-right: 0;
 		}
 		.article_read_time_wrap ul {
 			display: flex;
@@ -189,7 +197,9 @@ function add_custom_css() { ?>
     		justify-content: space-between;
 		}
 		.article_read_time_wrap ul li {
-			list-style: none;
+			    list-style: none;
+			    padding-left: 50px;
+			    position: relative;
 		}
 		.article_read_time_wrap ul li span {
 			font-weight: 600;
@@ -201,7 +211,67 @@ function add_custom_css() { ?>
 		.single-post .post-meta-infos {
 			display: none;
 		}
+		.article_read_time_wrap li {
+
+		}
+		.autor_ic:before {
+			    background-size: 45px 45px;
+			    display: inline-block;
+			    width: 45px;
+			    height: 45px;
+			    content: "";
+			    background-repeat: no-repeat;	
+			    background-repeat: no-repeat;
+			    position: absolute;
+			    left: -6px;
+			    top: 0;
+			        border-radius: 50%;
+		}
+		.last_ic:before {
+			/*content: url('<?php echo get_stylesheet_directory_uri();?>/images/blog-last-updated.jpg');*/
+			    background-image: url('<?php echo get_stylesheet_directory_uri();?>/images/blog-last-updated.jpg');
+			    background-size: 40px 40px;
+			    display: inline-block;
+			    width: 40px;
+			    height: 40px;
+			    content: "";
+			    background-repeat: no-repeat;
+			    background-repeat: no-repeat;
+			    position: absolute;
+			    left: 0;
+
+		}
+		.time_ic:before  {
+			/*content: url('<?php echo get_stylesheet_directory_uri();?>/images/blog-read-time.jpg');*/
+			    background-image: url('<?php echo get_stylesheet_directory_uri();?>/images/blog-read-time.jpg');
+			    background-size: 40px 45px;
+			    display: inline-block;
+			    width: 40px;
+			    height: 45px;
+			    content: "";
+			    background-repeat: no-repeat;	
+			    background-repeat: no-repeat;
+			    position: absolute;
+			    left: 0;
+			    top: 0;
+		}
+		.av-share-box-list_c {
+			    border-color: #e1e1e14a;
+		    padding: 3px;
+		    margin: 0;
+		    border: 1px solid;
+		    border-bottom: none;
+		    text-align: center;
+		    font-size: 16px;
+		    line-height: 25px;
+		}
+		#fb-like-div {
+			font-weight: bold;
+		}
 		@media (max-width: 767px) {
+			.av-share-box-list_c {
+			    background-color: #dcdcdc;
+			}
 			.responsive #top.single-post #wrap_all .container {
 
 			}
@@ -213,7 +283,8 @@ function add_custom_css() { ?>
 			}
 			.soc_share_bookbend_wrap {
 			    width: 100%;
-			    height: 50px;
+			    /*height: 50px;*/
+			    height: 92px;
 			    position: fixed;
 			    top: inherit;
 			    bottom: 0;
@@ -252,6 +323,14 @@ function add_custom_css() { ?>
 				color:white;
 			}
 		}
+		@media (max-width: 566px) {
+			.article_read_time_wrap ul {
+			    flex-direction: column;
+			}
+			.article_read_time_wrap ul li {
+			    margin-bottom: 10px;
+			}
+		}
 	</style>
 	<?php
 }
@@ -261,15 +340,40 @@ function article_read_time_func( $atts ){
 
 	ob_start();
 	global $post;
+	//var_dump($post->post_author);
+	//var_dump(get_user_meta( $post->post_author ));
+	$u_meta = get_user_meta( $post->post_author );
+	//echo "<pre>", var_dump($u_meta), "</pre>";
+	//var_dump( $u_meta['wpqy_user_avatar'][0]);
 	$author_name = get_the_author_meta('display_name', $post->post_author);
+	//var_dump(get_avatar_url( $post->post_author ));
+	//var_dump(wp_get_attachment_thumb_url( $u_meta['wpqy_user_avatar'][0] ));
 
+	if($u_meta['wpqy_user_avatar'][0]) {
+		?>
+			<style>
+				.autor_ic:before {
+					background-image: url('<?php echo wp_get_attachment_thumb_url( $u_meta['wpqy_user_avatar'][0] );?>');
+				}
+			</style>
+		<?php
+	} else 
+		if(get_avatar_url( $post->post_author )) {
+		?>
+			<style>
+				.autor_ic:before {
+					background-image: url('<?php echo get_avatar_url( $post->post_author );?>');
+				}
+			</style>
+		<?php
+	}
 	?>
 	<div class="article_read_time_wrap">
 		<ul>
 			<?php
-				echo '<li><span>By: </span>'.$author_name.'</li>';
-				echo '<li><span>Last updated: </span>'. date('F jS, Y ', strtotime($post->post_modified)) .'</li>';
-				echo '<li><span>Read Time: </span>'. prefix_estimated_reading_time($post->post_content, 300).' min</li>';
+				echo '<li class="autor_ic"><span>By: </span>'.$author_name.'</li>';
+				echo '<li class="last_ic"><span>Last updated: </span>'. date('F jS, Y ', strtotime($post->post_modified)) .'</li>';
+				echo '<li class="time_ic"><span>Read Time: </span>'. prefix_estimated_reading_time($post->post_content, 300).' min</li>';
 					// $wpm = 300;
 					// $clean_content = strip_shortcodes( $post->post_content );
 					// var_dump($clean_content);

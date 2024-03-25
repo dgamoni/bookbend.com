@@ -63,6 +63,12 @@
 				?>
 
 				<div class="soc_share_bookbend_wrap">
+				<ul class="av-share-box-list noLightbox av-share-box-list_c">
+					<li class="av-share-link av-social-link-facebook_">
+				 		<span id="fb-like-div">0</span>
+				 		<span>shares</span>
+				 	</li>
+				</ul>
 					<?php
 						avia_social_share_links();
 					?>
