@@ -114,3 +114,187 @@ function builder_set_debug()
 {
   return "debug";
 }
+
+
+add_action('wp_footer', 'add_custom_css');
+function add_custom_css() { ?>
+	<script>
+		jQuery(document).ready(function($) {
+
+		});
+	</script>
+	<style>
+		.single-post .content {
+
+		}
+		.single-post .sidebar {
+		    /*padding-top: 30px;*/
+		    /*padding-bottom: 30px;*/
+		    padding: 0;
+		}
+		.single-post .container .av-content-small.units {
+		    max-width: 680px;
+		        background-color: white;
+		        margin-left: 90px;
+		            margin-bottom: 30px;
+		}
+		#top.single-post #main .sidebar {
+		    max-width: 300px;
+		}
+		.single-post .template-single-blog {
+			margin-top: 30px;
+		}
+		.single-post .inner_sidebar {
+		    margin-left: 30px;
+		}
+		.single-post .sidebar_right .comment_container {
+		        padding-left: 50px;
+		}
+		.single-post .av-share-box .av-share-link-description {
+		    display: none;
+		}
+		.soc_share_bookbend_wrap {
+			  width: 60px;
+		  height: 220px;
+		  position: fixed;
+		  margin-top: 0px;
+		  perspective: 1000px;
+		  top: 200px;
+		}
+		#top .soc_share_bookbend_wrap .av-share-box ul {
+			display: flex;
+		    flex-direction: column;
+		    flex-wrap: wrap;
+		}
+		.soc_share_bookbend_wrap .av-share-box {
+		    margin-top: 0;
+		}
+		.soc_share_bookbend_wrap .av-share-box .avia-related-tooltip {
+		    width: 120px;
+		    padding: 13px 7px;
+		    line-height: 17px;
+		}
+		.soc_share_bookbend_mobile {
+			display: none;
+		}
+		.main_color div.article_read_time_wrap {
+			padding: 10px;
+			border-bottom: 1px solid #e1e1e1;
+			font-size: 16px;
+    line-height: 20px;
+		}
+		.article_read_time_wrap ul {
+			display: flex;
+			align-items: right;
+    		justify-content: space-between;
+		}
+		.article_read_time_wrap ul li {
+			list-style: none;
+		}
+		.article_read_time_wrap ul li span {
+			font-weight: 600;
+    		display: block;
+		}
+		.single-post .main_color.container_wrap_first.container_wrap.sidebar_right {
+		    background: #ECECEC!important;
+		}
+		.single-post .post-meta-infos {
+			display: none;
+		}
+		@media (max-width: 767px) {
+			.responsive #top.single-post #wrap_all .container {
+
+			}
+			.responsive #top.single-post .container .av-content-small {
+
+			}
+			.single-post article {
+				padding: 0 50px;
+			}
+			.soc_share_bookbend_wrap {
+			    width: 100%;
+			    height: 50px;
+			    position: fixed;
+			    top: inherit;
+			    bottom: 0;
+			    z-index: 999;
+			    left: 0;
+			}
+			#top .soc_share_bookbend_wrap .av-share-box ul {
+				display: flex;
+			    flex-direction: row;
+			    flex-wrap: wrap;
+			    justify-content: space-around;
+			    align-items: center;
+			}
+			.soc_share_bookbend_wrap .av-share-box ul li {
+				flex: 1;
+			    display: flex;
+			    justify-content: center;
+			}
+			.soc_share_bookbend_wrap .av-social-link-facebook {
+				background-color: #37589b;
+			}
+			.soc_share_bookbend_wrap .av-social-link-twitter {
+				background-color: #46d4fe;
+			}
+			.soc_share_bookbend_wrap .av-social-link-linkedin {
+				background-color: #419cca;
+			}
+			.soc_share_bookbend_wrap .av-social-link-mail {
+				background-color: #9fae37;
+			}
+			.soc_share_bookbend_wrap .av-social-link-facebook a,
+			.soc_share_bookbend_wrap .av-social-link-twitter a,
+			.soc_share_bookbend_wrap .av-social-link-linkedin a,
+			.soc_share_bookbend_wrap .av-social-link-mail a
+			 {
+				color:white;
+			}
+		}
+	</style>
+	<?php
+}
+
+add_shortcode( 'article_read_time', 'article_read_time_func' );
+function article_read_time_func( $atts ){  
+
+	ob_start();
+	global $post;
+	$author_name = get_the_author_meta('display_name', $post->post_author);
+
+	?>
+	<div class="article_read_time_wrap">
+		<ul>
+			<?php
+				echo '<li><span>By: </span>'.$author_name.'</li>';
+				echo '<li><span>Last updated: </span>'. date('F jS, Y ', strtotime($post->post_modified)) .'</li>';
+				echo '<li><span>Read Time: </span>'. prefix_estimated_reading_time($post->post_content, 300).' min</li>';
+					// $wpm = 300;
+					// $clean_content = strip_shortcodes( $post->post_content );
+					// var_dump($clean_content);
+					// $clean_content = strip_tags( $clean_content );
+					// $word_count = str_word_count( $clean_content );
+					// var_dump($clean_content);
+					// var_dump($word_count);
+					// $time = ceil( $word_count / $wpm );
+					// var_dump($time);
+
+			?>
+		</ul>
+	</div>
+	<?php
+
+	$out .= ob_get_contents();
+	ob_end_clean();
+
+	return $out;
+}
+
+function prefix_estimated_reading_time( $content = '', $wpm = 300 ) {
+	$clean_content = strip_shortcodes( $content );
+	$clean_content = strip_tags( $clean_content );
+	$word_count = str_word_count( $clean_content );
+	$time = ceil( $word_count / $wpm );
+	return $time;
+}
